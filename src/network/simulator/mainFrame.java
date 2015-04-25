@@ -27,6 +27,7 @@ public class mainFrame extends javax.swing.JFrame {
     public Link linkObj[]=new Link[100];
     public Agent agentObj[]=new Agent[100];
     public Application appObj[]=new Application[100];
+    public int links[][]=new int [100][100];
     private Graphics g;
             /**
      * Creates new form mainFrame
@@ -542,6 +543,11 @@ public class mainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         int from=Integer.parseInt(jTextField4.getText());
         int to=Integer.parseInt(jTextField5.getText());
+        if(links[from][to]!=0){
+            System.out.println("Link Already Exists!!");
+            return;
+        }
+        links[from][to]=1;
         int capacity=Integer.parseInt(jTextField1.getText());
         int delay=Integer.parseInt(jTextField2.getText());
         int queueSize=Integer.parseInt(jTextField3.getText());
