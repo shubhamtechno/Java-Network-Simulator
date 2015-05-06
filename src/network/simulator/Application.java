@@ -16,6 +16,7 @@ public class Application {
     int agentId;
     int start;
     int stop;
+    int duration;
 
     public Application(int id, String type, int agentId, int start, int stop) {
         this.id = id;
@@ -23,6 +24,9 @@ public class Application {
         this.agentId = agentId;
         this.start = start;
         this.stop = stop;
+        this.duration=stop-start;
     }
+    
+    
 
 }

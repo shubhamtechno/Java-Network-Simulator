@@ -7,8 +7,10 @@
 package network.simulator;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
@@ -19,16 +21,20 @@ import javax.swing.JLabel;
 public class mainFrame extends javax.swing.JFrame {
 
     public int choice=1;
-    public int nodeNum=-1;
-    public int linkNum=-1;
-    public int agentNum=-1;
-    public int appNum=-1;
-    public Node nodeObj[]=new Node[100];
-    public Link linkObj[]=new Link[100];
-    public Agent agentObj[]=new Agent[100];
-    public Application appObj[]=new Application[100];
-    public int links[][]=new int [100][100];
+    public static int nodeNum=-1;
+    public static int linkNum=-1;
+    public static int agentNum=-1;
+    public static int appNum=-1;
+    public static Node nodeObj[]=new Node[100];
+    public static Link linkObj[]=new Link[100];
+    public static Agent agentObj[]=new Agent[100];
+    public static Application appObj[]=new Application[100];
+    public static int links[][]=new int [100][100];
+    public static int agents[]=new int[100];
     private Graphics g;
+    public static int simulationTime;
+    public static String outFile;
+    private String[] args;
             /**
      * Creates new form mainFrame
      */
@@ -50,6 +56,7 @@ public class mainFrame extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel0 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
@@ -91,6 +98,13 @@ public class mainFrame extends javax.swing.JFrame {
         jTextField9 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel20 = new javax.swing.JLabel();
+        jTextField12 = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        jTextField14 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1100, 600));
@@ -143,8 +157,19 @@ public class mainFrame extends javax.swing.JFrame {
         });
         jToolBar1.add(jButton4);
 
+        jButton8.setText("Simulation");
+        jButton8.setFocusable(false);
+        jButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jButton8);
+
         getContentPane().add(jToolBar1);
-        jToolBar1.setBounds(10, 10, 220, 23);
+        jToolBar1.setBounds(10, 10, 290, 23);
 
         jDesktopPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -209,6 +234,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel8.setText("From ");
 
         jTextField4.setText("0");
+        jTextField4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jTextField4.setMaximumSize(new java.awt.Dimension(30, 20));
         jTextField4.setMinimumSize(new java.awt.Dimension(30, 20));
         jTextField4.setPreferredSize(new java.awt.Dimension(30, 20));
@@ -463,6 +489,69 @@ public class mainFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel3);
         jPanel3.setBounds(10, 160, 510, 30);
 
+        jPanel4.setMaximumSize(new java.awt.Dimension(1070, 30));
+        jPanel4.setPreferredSize(new java.awt.Dimension(1070, 30));
+
+        jLabel20.setText("Trace File");
+
+        jTextField12.setText("out");
+        jTextField12.setAutoscrolls(false);
+        jTextField12.setMaximumSize(new java.awt.Dimension(30, 20));
+        jTextField12.setMinimumSize(new java.awt.Dimension(30, 20));
+        jTextField12.setPreferredSize(new java.awt.Dimension(30, 20));
+
+        jLabel21.setText(".tr");
+
+        jButton9.setText("Simulate");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jLabel22.setText("Simulation Time");
+
+        jTextField14.setText("10");
+        jTextField14.setMaximumSize(new java.awt.Dimension(30, 20));
+        jTextField14.setMinimumSize(new java.awt.Dimension(30, 20));
+        jTextField14.setPreferredSize(new java.awt.Dimension(30, 20));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9)
+                    .addComponent(jLabel22)
+                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
+                .addGap(28, 28, 28))
+        );
+
+        getContentPane().add(jPanel4);
+        jPanel4.setBounds(10, 200, 310, 30);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -473,11 +562,13 @@ public class mainFrame extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(240, 240, 240));
         jButton2.setBackground(new java.awt.Color(240, 240, 240));
         jButton3.setBackground(new java.awt.Color(240, 240, 240));
+        jButton8.setBackground(new java.awt.Color(240, 240, 240));
         jPanel1.setVisible(false);
         jPanel2.setVisible(false);
         jPanel3.setBounds(10, 40, 1070, 30);
         jPanel3.setVisible(true);
         jPanel0.setVisible(false);
+        jPanel4.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -487,11 +578,13 @@ public class mainFrame extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(240, 240, 240));
         jButton2.setBackground(new java.awt.Color(240, 240, 240));
         jButton4.setBackground(new java.awt.Color(240, 240, 240));
+        jButton8.setBackground(new java.awt.Color(240, 240, 240));
         jPanel1.setVisible(false);
         jPanel3.setVisible(false);
         jPanel2.setBounds(10, 40, 1070, 30);
         jPanel2.setVisible(true);
         jPanel0.setVisible(false);
+        jPanel4.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -501,11 +594,13 @@ public class mainFrame extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(240, 240, 240));
         jButton3.setBackground(new java.awt.Color(240, 240, 240));
         jButton4.setBackground(new java.awt.Color(240, 240, 240));
+        jButton8.setBackground(new java.awt.Color(240, 240, 240));
         jPanel1.setBounds(10, 40, 1070, 30);
         jPanel1.setVisible(true);
         jPanel3.setVisible(false);
         jPanel0.setVisible(false);
         jPanel2.setVisible(false);
+        jPanel4.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -515,9 +610,11 @@ public class mainFrame extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(240, 240, 240));
         jButton2.setBackground(new java.awt.Color(240, 240, 240));
         jButton3.setBackground(new java.awt.Color(240, 240, 240));
+        jButton8.setBackground(new java.awt.Color(240, 240, 240));
         jPanel1.setVisible(false);
         jPanel2.setVisible(false);
         jPanel3.setVisible(false);
+        jPanel4.setVisible(false);
         jPanel0.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -548,6 +645,7 @@ public class mainFrame extends javax.swing.JFrame {
             return;
         }
         links[from][to]=1;
+        links[to][from]=1;
         int capacity=Integer.parseInt(jTextField1.getText());
         int delay=Integer.parseInt(jTextField2.getText());
         int queueSize=Integer.parseInt(jTextField3.getText());
@@ -558,7 +656,7 @@ public class mainFrame extends javax.swing.JFrame {
         int toX=nodeObj[to].getX_cord();
         int toY=nodeObj[to].getY_cord();
         drawLink(fromX,fromY,toX,toY);
-        System.out.println("Link Created!!");
+        System.out.println("Link Created!!"+from+" "+to);
         linkObj[++linkNum]=new Link(linkNum,from,to,linkType,capacity,delay,queueSize,queueType);
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -583,6 +681,12 @@ public class mainFrame extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         int agentId=Integer.parseInt(jTextField6.getText());
+        if(agents[agentId]!=0)
+        {
+            System.out.println("Agent already assigned!!");
+            return;
+        }
+        agents[agentId]=1;
         int start=Integer.parseInt(jTextField8.getText());
         int stop=Integer.parseInt(jTextField9.getText());
         String appType=jComboBox5.getName();
@@ -599,11 +703,35 @@ public class mainFrame extends javax.swing.JFrame {
         System.out.println("app Created!!"+appNum);
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        choice=5;
+        jButton8.setBackground(new java.awt.Color(204, 204, 204));
+        jButton1.setBackground(new java.awt.Color(240, 240, 240));
+        jButton4.setBackground(new java.awt.Color(240, 240, 240));
+        jButton2.setBackground(new java.awt.Color(240, 240, 240));
+        jButton3.setBackground(new java.awt.Color(240, 240, 240));
+        jPanel4.setBounds(10, 40, 1070, 30);
+        jPanel0.setVisible(false);
+        jPanel1.setVisible(false);
+        jPanel2.setVisible(false);
+        jPanel3.setVisible(false);
+        jPanel4.setVisible(true);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        simulationTime=Integer.parseInt(jTextField14.getText());
+        outFile=jTextField12.getText();
+        Simulation.main(args);
+    }//GEN-LAST:event_jButton9ActionPerformed
+
     public static void drawLink(int fromX, int fromY, int toX, int toY) {
         //super.paint(g);  // fixes the immediate problem.
         //((Graphics2D)g).draw(new Line2D.Double(fromX, fromY, toX, toY));
         Graphics g = jDesktopPane1.getGraphics();
-        g.drawLine( fromX, fromY,  toX, toY);
+        ((Graphics2D)g).draw(new Line2D.Double(fromX, fromY, toX, toY));
+        //g.drawLine( fromX, fromY,  toX, toY);
     }
     
     /**
@@ -647,6 +775,8 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
     private javax.swing.JComboBox jComboBox4;
@@ -663,6 +793,9 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -674,9 +807,12 @@ public class mainFrame extends javax.swing.JFrame {
     public static javax.swing.JPanel jPanel1;
     public static javax.swing.JPanel jPanel2;
     public static javax.swing.JPanel jPanel3;
+    public static javax.swing.JPanel jPanel4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField jTextField12;
+    private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;

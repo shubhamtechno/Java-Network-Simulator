@@ -6,6 +6,9 @@
 
 package network.simulator;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  *
  * @author sona1_000
@@ -19,6 +22,7 @@ public class Link {
     int delay;
     int queueSize;
     String queueType;
+    Queue<Integer> q;
 
     public Link(int id, int fromNode, int toNode, String type, int capacity, int delay, int queueSize, String queueType) {
         this.id = id;
@@ -29,6 +33,7 @@ public class Link {
         this.delay = delay;
         this.queueSize = queueSize;
         this.queueType = queueType;
+        this.q=new LinkedList<Integer>();
     }
     
     
